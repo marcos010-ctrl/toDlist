@@ -5,13 +5,6 @@ import java.util.Scanner;
 public class todolist {
 
 
-
-
-/**
- *
- * @author Aluno
- */
-public class ex3 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
@@ -26,7 +19,7 @@ public class ex3 {
          System.out.println("2 - Listar tarefas");
          System.out.println("3 - concluir tarefas");
          System.out.println("4 - excluir tarefa");
-         System.out.println("5 - excluir");
+         System.out.println("5 - sair");
          
          System.out.println("escolha uma opcao:");
          opcao = scanner.nextInt();
@@ -54,49 +47,79 @@ public class ex3 {
                  }
                  
                  break;
-                         
+                 
              case 2:
                  System.out.println("=====MINHAS TAREFAS=====");
                  
-                 boolean existeTarefa = false; 
+                 boolean existeTarefas = false;
                  
                  for(int i = 0; i < tarefas.length; i++){
-                    if (tarefas[i] != null){
-                        existeTarefa = true;
-                        
-                      if(concluidas[i] == true)
-                         System.out.println(("i + 1") + "= [x]" + tarefas [i]);
-                    }else {
-                        System.out.println(("i + 1") + " - [ ]" + tarefas[i]);
-                        
-                       if (existeTarefa == false){
-                           System.out.println("nenhuma tarefa cadastrada! ");
-                       
-                       }
-                       break;
-                       
-                    case 3:
-                    System.out.println("digite o numero da tarefa que deseja concluir");
-                    int numeroConcluir = scanner.nextInt();
+                    if(tarefas[i] != null){
+                        existeTarefas = true;
+                        if(concluidas[i] == true){
+                             System.out.println((i + 1) + " = [x]" + tarefas [i] );
+                        }else{
+                            System.out.println((i + 1) + " = []" + tarefas [i] );
+                        }
+                    }
+                 }
+                 
+                     if (existeTarefas == false){
+                         System.out.println("Nenhuma tarefa cadastrada!");
+                     }
+                     break;
+                     
+             case 3:
+                 System.out.println("Digite o numero da tarefa que deseja concluir:");
+                 int numeroConcluir = scanner.nextInt();
+                 
+                 int indiceConcluir = numeroConcluir -1;
+                 
+                 if (indiceConcluir >= 0 &&
+                         indiceConcluir < tarefas.length &&
+                         tarefas [indiceConcluir] != null){
+                     
+                     concluidas [indiceConcluir] = true;
+                     
+                     System.out.println("Tarefa concluida com sucesso");
+                 }else{
+                     System.out.println("tarefa invalida");
+                 }
+             case 4:
+                 System.out.println("Digite o numero que deseja: ");
+                 int numeroExcluir = scanner.nextInt();
+                 
+                 int indiceExcluir = numeroExcluir -1;
+                 
+                 if (indiceExcluir >= 0 &&
+                         indiceExcluir < tarefas.length &&
+                         tarefas [indiceExcluir] != null){
+                     
+                    tarefas[indiceExcluir] = null;
+                    concluidas [indiceExcluir] = false;
                     
-                    int indiceConcluir = numeroConcluir - 1;
-                    
-                    if (indiceConcluir >= 0
-                    && indiceConcluir < tarefas.length &&
-                    tarefas [indiceConcluir] != null){
-                    
-                    concluidas[indiceConcluir]= true;
-                    
-                    System.out.println("tarefa concluida com sucesso");
-                    }else{
-                   System.out.println("tarefa invalida");
-                    }   
-                 } 
-                 }    
+                     System.out.println("tarefa excluida com sucesso!");
+                     
+                 }else{
+                     System.out.println("tarefa invalida!");
+                 }
+                 
+                 break;
+             case 5:
+                 System.out.println("programa encerrado. ate mais!");
+                 
+                 break;
+             default:
+                 System.out.println("opcao invalida!");
+                 
+                 break;
+             
+                         
+                         
          }
         
     }
     }
     
-}   
 }
+  
