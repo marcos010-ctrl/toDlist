@@ -22,6 +22,7 @@ public class NewJFrame extends javax.swing.JFrame {
     
     private final ArrayList<String> tarefas = new ArrayList<>();
     private final ArrayList<String> tarefasFiltradas = new ArrayList<>();
+    private int indiceTarefaSelecionada;
     
     public NewJFrame() {
         initComponents();
@@ -90,8 +91,10 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTableTarefas);
 
         jButtonConcluirTarefas.setText("Concluir");
+        jButtonConcluirTarefas.addActionListener(this::jButtonConcluirTarefasActionPerformed);
 
         jButtonRemoverTarefa.setText("Remover");
+        jButtonRemoverTarefa.addActionListener(this::jButtonRemoverTarefaActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -169,16 +172,18 @@ public class NewJFrame extends javax.swing.JFrame {
     }                                                      
 
     public boolean hasTarefaRepetida(String novaTarefa){
+        
+        
         for (String tarefa : tarefas){
             String dados [] = tarefa.split(";");
             
             if (novaTarefa.toLowerCase().equals(dados[0].toLowerCase())) {
-                
+                return true;
             }
-            return true;
+            
         }
         
-    return false;
+        return false;
     }
     
     private void preencherTabela(){
@@ -202,6 +207,88 @@ public class NewJFrame extends javax.swing.JFrame {
     // TODO add your handling code here:
     }//GEN-LAST:event_jButtonAdicionarActionPerformed
 
+    private void jButtonRemoverTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverTarefaActionPerformed
+        int linhaSelecionada = jTableTarefas.getSelectedRow();
+        
+        if (linhaSelecionada< 0){
+            JOptionPane.showMessageDialog(null, "nenhuma tarefa foi selecionada!");
+            return;
+        }
+        
+        int opcao = JOptionPane.showConfirmDialog(null, "deseja realmente excluir a tarefa");
+        
+        String tarefaSelecionada = recuperarTarefa(linhaSelecionada);
+        
+        int indiceTarefaSelecionada = tarefas.indexOf(tarefaSelecionada);
+        
+        if(opcao == JOptionPane.YES_OPTION){
+            tarefas.remove(indiceTarefaSelecionada);
+            preencherTabela();
+        }
+        
+        filtrarTabela();
+        
+        preencherTabela();
+    }//GEN-LAST:event_jButtonRemoverTarefaActionPerformed
+
+    private void jButtonConcluirTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConcluirTarefasActionPerformed
+        int linhaSelecionada = jTableTarefas.getSelectedRow();
+        
+        if (linhaSelecionada < 0){
+            JOptionPane.showMessageDialog(null, "nenhuma tarefa foi selecionada!");
+            return;
+        }
+        
+        String tarefaSelecionada = recuperarTarefa (linhaSelecionada);
+        
+        int inidiceTarefa = tarefas.indexOf(tarefaSelecionada);
+        
+        String[] dados = tarefas.get(indiceTarefaSelecionada).split(";");
+        
+        tarefas.set(indiceTarefaSelecionada, dados[0] + ";" + CONCLUIDA);
+        
+        filtrarTabela();
+        
+        preencherTabela();
+    }//GEN-LAST:event_jButtonConcluirTarefasActionPerformed
+
+    private void filtrarTabela(){
+        int opcao = jComboBoxFiltroStatus.getSelectedIndex();
+        tarefasFiltradas.clear();
+        
+        String[] dados;
+        
+        for(String tarefa : tarefas){
+            dados = tarefa.split(";");
+            
+            switch (opcao) {
+                case 0:
+                    tarefasFiltradas.add(tarefa);
+                    break;
+                case 1:
+                    if (dados[1]. equals(CONCLUIDA)) {
+                        tarefasFiltradas.add(tarefa);
+                        
+                    }
+                    
+                    break;
+                case 2:
+                   if (dados[1].equals(NAO_CONCLUIDA)){
+                       tarefasFiltradas.add(tarefa);
+                   } 
+                default:
+                    throw new AssertionError();
+            }
+        }
+    }
+    
+    private String recuperarTarefa(int indiceTarefa) {
+        if (jComboBoxFiltroStatus.getSelectedIndex()> 0){
+            return tarefasFiltradas.get(indiceTarefa);       
+        }else{
+            return tarefas.get(indiceTarefa);
+        }
+    }
     /**
      * @param args the command line arguments
      */
